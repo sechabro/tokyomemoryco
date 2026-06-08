@@ -1,0 +1,24 @@
+{
+  "name": "astro-photography-blog-template",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build && node scripts/strip-unreferenced-assets.mjs",
+    "preview": "astro preview",
+    "astro": "astro",
+    "setup": "npm run gen:brand && npm run gen:icons && npm run gen:placeholders",
+    "gen:brand": "node scripts/generate-brand.mjs",
+    "gen:icons": "node scripts/generate-icons.mjs",
+    "gen:placeholders": "node scripts/generate-placeholders.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^6.0.2",
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource/cormorant-garamond": "^5.0.0",
+    "@fontsource/eb-garamond": "^5.0.0",
+    "astro": "^6.4.3"
+  }
+}

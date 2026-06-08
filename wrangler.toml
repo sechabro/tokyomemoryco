@@ -1,0 +1,36 @@
+# Cloudflare Workers (Static Assets) configuration.
+# Serves the prebuilt static site in ./dist and runs a small Worker for the
+# first-party page-view counter at /api/views (backed by D1). Deploy: npx wrangler deploy
+# (The _headers file emitted into ./dist is honored for response headers.)
+#
+# Rename "photography-blog" to whatever you like — it's your Worker's name.
+name = "photography-blog"
+main = "worker/index.js"
+compatibility_date = "2025-06-01"
+
+# Don't publish on the auto-generated *.workers.dev subdomain — serve the site
+# only from your own custom domain. Set to true if you do want the workers.dev URL.
+workers_dev = false
+
+[assets]
+directory = "./dist"
+# Bound so the Worker can fall back to serving static assets for non-/api routes.
+binding = "ASSETS"
+
+# D1 database for the page-view counts. Create it once, then paste the printed id
+# into database_id below (see the README, "View counts"):
+#   npx wrangler d1 create photo_blog
+#   npx wrangler d1 execute photo_blog --remote --file=./migrations/0001_init.sql
+# Optional (recommended): a private salt for the dedup hash:
+#   npx wrangler secret put VIEW_SALT
+#
+# Until database_id is filled in, the site still builds and serves normally — the
+# footer view counter simply stays hidden.
+[[d1_databases]]
+binding = "DB"
+database_name = "photo_blog"
+database_id = ""
+
+# Daily cleanup of the short-lived dedup table (keeps only the current UTC day).
+[triggers]
+crons = ["0 4 * * *"]
