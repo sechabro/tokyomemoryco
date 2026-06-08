@@ -1,0 +1,22 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# astro
+.astro/
+
+# cloudflare / wrangler
+.wrangler/
+
+# logs & env
+*.log
+.env
+.env.*
+!.env.example
+
+# os
+.DS_Store
+Thumbs.db
