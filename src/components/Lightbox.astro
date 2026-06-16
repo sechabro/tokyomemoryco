@@ -24,16 +24,57 @@
     const btnPrev = lightbox.querySelector('.lightbox__prev') as HTMLButtonElement;
     const btnNext = lightbox.querySelector('.lightbox__next') as HTMLButtonElement;
     let index = -1;
+    let shown = -1; // which photo the <img> currently holds
+    let seq = 0; // invalidates an in-flight upgrade when the photo changes
 
     const render = (i: number) => {
       index = (i + tiles.length) % tiles.length;
       const tile = tiles[index];
-      image.src = tile.dataset.full ?? '';
       image.alt = tile.dataset.alt ?? '';
       const cap = tile.dataset.caption ?? '';
       caption.textContent = cap;
       caption.hidden = cap === '';
+      if (shown === index) return; // already displaying this photo
+      shown = index;
+      const ticket = ++seq;
+
+      // Show the rendition the grid already downloaded — it's in cache, so the
+      // photo appears immediately instead of waiting for the big lightbox
+      // file. The browser keeps painting the previous photo until a new file
+      // arrives, so the <img> also stays hidden (is-loading) until this
+      // preview's load event — otherwise opening photo B after photo A would
+      // flash A first.
+      const thumb = tile.querySelector<HTMLImageElement>('.photo__img');
+      const preview = thumb?.currentSrc || '';
+      const full = tile.dataset.full ?? '';
+      image.classList.add('is-loading');
+      image.removeAttribute('sizes');
+      image.srcset = '';
+      image.src = preview || full;
+
+      // Then upgrade in place to a viewport-matched rendition: with srcset +
+      // sizes the browser fetches only as many pixels as the screen needs
+      // (data-full, the largest rendition, remains the fallback). Decoded
+      // off-screen first so the swap never blanks the visible photo.
+      const srcset = thumb?.srcset ?? '';
+      if (!srcset || preview === full) return;
+      const hi = new Image();
+      hi.sizes = '100vw';
+      hi.srcset = srcset;
+      hi.src = full;
+      const apply = () => {
+        if (ticket !== seq) return; // user has moved to another photo
+        image.sizes = '100vw';
+        image.srcset = srcset;
+        image.src = full;
+      };
+      if (hi.decode) hi.decode().then(apply).catch(() => {});
+      else hi.onload = apply;
     };
+
+    const reveal = () => image.classList.remove('is-loading');
+    image.addEventListener('load', reveal);
+    image.addEventListener('error', reveal);
 
     const open = (i: number) => {
       render(i);

@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import { unified } from '@astrojs/markdown-remark';
 
 // https://astro.build/config
 export default defineConfig({
@@ -32,14 +33,22 @@ export default defineConfig({
     syntaxHighlight: 'prism',
     // Emit GFM table column alignment as `align` attributes rather than inline
     // `style="text-align:…"`, so tables stay within the strict CSP (no
-    // style-src 'unsafe-inline'). Styled in global.css.
-    remarkRehype: { tableCellAlignToStyle: false },
+    // style-src 'unsafe-inline'). Styled in global.css. Set on the default
+    // unified() processor — the old `markdown.remarkRehype` shortcut is
+    // deprecated in Astro 6 and slated for removal in a future major.
+    processor: unified({ remarkRehype: { tableCellAlignToStyle: false } }),
   },
 
   // Fully static output — perfect for Cloudflare's free tier.
   // Images are optimized at build time with sharp.
   build: {
-    // Inline small stylesheets to cut requests on mobile networks.
-    inlineStylesheets: 'auto',
+    // Inline ALL stylesheets into the HTML. With 'auto', global.css exceeded
+    // the inlining threshold and shipped as an external file; whenever the
+    // first paint beat that file, the page rendered unstyled and then snapped
+    // into the sidebar layout — a near-whole-viewport Cumulative Layout Shift
+    // attributed to html>body>main.main (seen on /calendar/). Inlining
+    // guarantees the first paint already matches the final layout, and drops a
+    // render-blocking request.
+    inlineStylesheets: 'always',
   },
 });

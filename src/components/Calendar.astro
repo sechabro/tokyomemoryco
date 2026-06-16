@@ -23,7 +23,8 @@ const MONTHS = [
 const items = await Promise.all(
   calendar
     .filter((e) => byName.has(e.file)) // only entries whose image is present
-    .sort((a, b) => b.year - a.year || b.month - a.month) // newest first
+    // Newest first; same-month ties sort Z→A by location ("a…" below "z…").
+    .sort((a, b) => b.year - a.year || b.month - a.month || b.location.localeCompare(a.location))
     .map(async (e) => {
       const photo = await renderPhoto(byName.get(e.file)!);
       return {

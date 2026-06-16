@@ -7,8 +7,11 @@
 //
 //  To describe a photo, fill in its year, month (1–12) and location below. A
 //  caption stays hidden until you add a location, so a blank entry simply shows
-//  the photo on its own. (Photos still order by filename, highest first; this
-//  file only controls captions, not order.)
+//  the photo on its own.
+//
+//  These dates also control the gallery order: newest month/year first, and
+//  within the same month, locations sort Z→A. Photos without a date yet sink
+//  to the bottom — no filename renumbering needed when adding older photos.
 //
 //  The entries below are EXAMPLES that match the bundled placeholder images.
 //  Replace the locations with real ones (or delete entries) as you add photos.

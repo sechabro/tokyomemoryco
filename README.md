@@ -245,8 +245,8 @@ Every page can show a **"Page Viewed N"** total in the footer, served entirely
 from your own domain: a small Worker (`worker/index.js`) backed by a
 [Cloudflare D1](https://developers.cloudflare.com/d1/) database — no third-party
 analytics. It's privacy-friendly: no cookies, no raw IP/User-Agent stored, repeat
-views de-duplicated per visitor/day with a salted hash that a daily cron
-discards, and crawlers make no database call at all.
+views de-duplicated per IP/day with a salted hash that a daily cron discards, and
+crawlers make no database call at all.
 
 **One-time setup on Cloudflare** (comfortably within the free tier):
 
@@ -279,6 +279,14 @@ Until `database_id` is filled in, the site still builds and serves normally — 
 footer counter simply stays hidden. The wording/placement live in the
 `.site-footer__views` markup in `src/layouts/Layout.astro`; the counting logic
 lives in `worker/index.js`.
+
+**Abuse-resistance.** The endpoint is public (every visitor's browser calls it), so
+it's hardened in `worker/index.js`: it counts a path only if it resolves to a real
+HTML page (no junk rows in `page_views`), de-duplicates per IP + path + day (so
+rotating the `User-Agent` can't re-count), and honors two optional Workers
+rate-limit bindings already declared in `wrangler.toml` (`RATE_LIMITER` per client,
+`GLOBAL_LIMITER` as a whole-endpoint backstop). Both checks are skipped
+automatically if their binding is absent, so local dev still works.
 
 > Don't want the counter at all? You can ignore `wrangler.toml`/`worker/` and
 > deploy the static `dist/` to any static host — the footer counter just stays
@@ -314,7 +322,11 @@ staying **out of AI training sets**.
 
 - **Crawler stance** (`src/pages/robots.txt.ts`): search + AI *search/citation*
   crawlers are allowed; AI *training* / bulk crawlers (`GPTBot`, `CCBot`,
-  `ClaudeBot`, …) are blocked. Edit the `ALLOW` / `BLOCK` lists to change it.
+  `ClaudeBot`, …) are blocked. Edit the `ALLOW` / `BLOCK` lists to change it. The
+  block list is also **enforced** at the edge when the Worker is deployed:
+  `worker/index.js` (`BLOCKED_BOT_RE`) returns `403` to those crawlers, so one that
+  ignores `robots.txt` still can't download pages or images. (Search engines, incl.
+  Google Images, aren't on the list and pass through untouched.)
 - **Sitemap** via `@astrojs/sitemap`, linked from `robots.txt`.
 - **`llms.txt`** (`src/pages/llms.txt.ts`): a curated Markdown index for AI tools
   (see https://llmstxt.org/).
@@ -325,8 +337,9 @@ staying **out of AI training sets**.
 - **Photo SEO is text-driven** — name files descriptively (`lake-fog.jpg`, not
   `IMG_2451.jpg`): the name becomes the image's `alt` text.
 
-> `robots.txt` is advisory. The `Cross-Origin-Resource-Policy` header still blocks
-> other sites from hot-linking your images.
+> `robots.txt` is advisory; the edge enforcement above (when the Worker is
+> deployed) covers the block list. The `Cross-Origin-Resource-Policy` header also
+> blocks other sites from hot-linking your images.
 
 ---
 

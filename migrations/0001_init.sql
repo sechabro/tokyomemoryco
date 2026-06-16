@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS page_views (
   count INTEGER NOT NULL DEFAULT 0
 );
 
--- Short-lived dedup table: one row per (visitor, path, UTC day). `k` is a salted
--- SHA-256 hash of IP + User-Agent + path + day (no raw IP/UA is ever stored);
+-- Short-lived dedup table: one row per (IP, path, UTC day). `k` is a salted
+-- SHA-256 hash of IP + path + day (no raw IP/UA is ever stored);
 -- `d` is the UTC epoch-day, used by the daily cron to purge past days. There is
 -- deliberately no index on `d`: the table only ever holds ~one day of rows, so
 -- the cron's scan is cheap, and skipping the index saves an index write on every

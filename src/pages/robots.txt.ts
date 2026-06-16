@@ -14,7 +14,10 @@ const ALLOW = [
   'Claude-User',
 ];
 
-// Blocked: AI training / bulk dataset crawlers (incl. image scrapers).
+// Blocked: AI training / bulk dataset crawlers (incl. image scrapers). This is
+// also ENFORCED at the edge — the Worker (worker/index.js, BLOCKED_BOT_RE) returns
+// 403 to these User-Agents, so ignoring the rule below still gets them no pages
+// and no images. Keep the two lists in sync.
 const BLOCK = [
   'GPTBot',
   'ClaudeBot',
@@ -51,7 +54,8 @@ export const GET: APIRoute = ({ site }) => {
     ...ALLOW.map((bot) => `User-agent: ${bot}`),
     'Allow: /',
     '',
-    '# Blocked AI training / bulk-scraping crawlers.',
+    '# Blocked AI training / bulk-scraping crawlers (pages and images alike). Also',
+    '# enforced at the edge, so ignoring this still gets them nothing.',
     ...BLOCK.map((bot) => `User-agent: ${bot}`),
     'Disallow: /',
     '',

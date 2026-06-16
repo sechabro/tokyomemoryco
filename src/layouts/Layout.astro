@@ -9,6 +9,13 @@ import '@fontsource/eb-garamond/latin-500.css';
 import '@fontsource/eb-garamond/latin-400-italic.css';
 
 import '../styles/global.css';
+
+// Preload the two most-used Latin faces (body 400 + display 500) so the web
+// fonts arrive promptly; combined with the metric-matched fallbacks in
+// global.css, the swap from fallback to web font is then shift-free.
+import ebGaramondBody from '@fontsource/eb-garamond/files/eb-garamond-latin-400-normal.woff2?url';
+import cormorantDisplay from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2?url';
+
 import Sidebar from '../components/Sidebar.astro';
 import BaseSchema from '../components/BaseSchema.astro';
 import { site } from '../config';
@@ -31,6 +38,8 @@ const year = new Date().getFullYear();
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={ebGaramondBody} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={cormorantDisplay} as="font" type="font/woff2" crossorigin />
     <script is:inline>
       // Apply the saved (or system) theme before paint to avoid a flash. Manual
       // choice is persisted in localStorage by the toggle in the sidebar.
@@ -45,6 +54,22 @@ const year = new Date().getFullYear();
         } catch (e) {}
       })();
     </script>
+    <style is:inline>
+      /* Critical CSS, inlined so it applies at parse time — before the bundled
+         stylesheet finishes loading. The browser's first paint then already
+         matches the final layout. Without it, the page briefly painted with
+         user-agent defaults (an 8px body margin; the lightbox overlay shown)
+         and snapped to these values once the stylesheet arrived, which surfaced
+         as the html>body and #lightbox>figure Cumulative Layout Shift (CLS).
+         `.lightbox` keeps the same selector as global.css so the more specific
+         `.lightbox.is-open` rule still wins when the viewer opens. */
+      body {
+        margin: 0;
+      }
+      .lightbox {
+        display: none;
+      }
+    </style>
     <link rel="icon" href="/favicon.png" type="image/png" sizes="256x256" />
     <link rel="icon" href="/favicon-dark.png" type="image/png" sizes="256x256" media="(prefers-color-scheme: dark)" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

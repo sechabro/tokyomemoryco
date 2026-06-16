@@ -10,6 +10,48 @@
    the README ("A second-script name") to add a tiny woff2 subset and wire it up
    here with an @font-face block plus a unicode-range for just your characters. */
 
+/* Metric-adjusted fallback fonts. The Latin web fonts load with
+   font-display: swap, so until they arrive text is shown in a local serif
+   (Georgia, else Times New Roman). These faces override that local serif's box
+   metrics — size-adjust + ascent/descent/line-gap — so it occupies almost
+   exactly the same space as the web font; the swap then no longer reflows the
+   page. This removes the body-copy / heading Cumulative Layout Shift (CLS) on
+   text-heavy pages. Values were generated from the actual font files with
+   @capsizecss/unpack (web metrics) against @capsizecss/metrics (fallbacks);
+   regenerate if the web fonts change. */
+@font-face {
+  font-family: 'EB Garamond Fallback';
+  src: local('Georgia');
+  size-adjust: 86.3614%;
+  ascent-override: 116.603%;
+  descent-override: 34.5061%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'EB Garamond Fallback';
+  src: local('Times New Roman');
+  size-adjust: 94.7692%;
+  ascent-override: 106.2581%;
+  descent-override: 31.4448%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Cormorant Garamond Fallback';
+  src: local('Georgia');
+  size-adjust: 88.6046%;
+  ascent-override: 104.2835%;
+  descent-override: 32.3911%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Cormorant Garamond Fallback';
+  src: local('Times New Roman');
+  size-adjust: 97.2308%;
+  ascent-override: 95.0316%;
+  descent-override: 29.5174%;
+  line-gap-override: 0%;
+}
+
 :root {
   --bg: #fcfcfb;
   --fg: #1b1b1a;
@@ -23,8 +65,8 @@
   --gap: clamp(0.5rem, 1.1vw, 1rem);
   --read: 72ch;
 
-  --serif-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-  --serif-body: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --serif-display: 'Cormorant Garamond', 'Cormorant Garamond Fallback', Georgia, 'Times New Roman', serif;
+  --serif-body: 'EB Garamond', 'EB Garamond Fallback', Georgia, 'Times New Roman', serif;
   /* Second-script name in a Song-style serif. If you self-host a subset (see the
      note above), add its family first; the platform 宋体 / Noto Serif SC fonts
      below are the cross-device fallbacks. */
@@ -46,8 +88,10 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   /* Reserve the scrollbar gutter so the layout never shifts sideways when a page
-     grows tall enough to scroll, or when the mobile menu locks body scrolling.
-     Fixes the html>body Cumulative Layout Shift (CLS). */
+     grows tall enough to scroll, or when the mobile menu locks body scrolling
+     — prevents a horizontal Cumulative Layout Shift (CLS). (The html>body
+     margin / lightbox FOUC shift is handled by the inline critical CSS in
+     Layout.astro.) */
   scrollbar-gutter: stable;
 }
 
@@ -400,8 +444,20 @@ a {
   max-height: 85vh;
   width: auto;
   height: auto;
+  /* Let the image shrink below its 85vh cap when the figure would otherwise
+     overflow (short landscape viewports, e.g. iPad), so the caption beneath it
+     stays on screen instead of being pushed off the bottom. A flex item won't
+     shrink past its intrinsic size without min-height:0; aspect ratio is kept
+     since it's a replaced element. On tall screens nothing shrinks. */
+  min-height: 0;
   object-fit: contain;
   box-shadow: 0 16px 50px rgba(0, 0, 0, 0.45);
+}
+
+/* While the next photo's file is still downloading, keep the stale bitmap of
+   the previous photo from showing (set/cleared in Lightbox.astro). */
+.lightbox__img.is-loading {
+  visibility: hidden;
 }
 
 .lightbox__caption {
