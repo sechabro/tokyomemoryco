@@ -34,7 +34,7 @@ pins major `22`).
 
 ```bash
 # Use this repo as a GitHub template (green "Use this template" button), or clone:
-git clone https://github.com/XD-QIN/xdqin_photography_blog_template.git my-site
+git clone https://github.com/XD-QIN/astro-photo-folio.git my-site
 cd my-site
 npm install
 npm run dev
