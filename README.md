@@ -34,7 +34,7 @@ pins major `22`).
 
 ```bash
 # Use this repo as a GitHub template (green "Use this template" button), or clone:
-git clone https://github.com/XD-QIN/xdqin_photography_blog_template.git my-site
+git clone https://github.com/XD-QIN/astro-photo-folio.git my-site
 cd my-site
 npm install
 npm run dev
@@ -254,13 +254,13 @@ crawlers make no database call at all.
    `[[d1_databases]]` block in `wrangler.toml`:
 
    ```sh
-   npx wrangler d1 create photo_blog
+   npx wrangler d1 create astro-photo-folio
    ```
 
 2. **Create the tables** from the migration:
 
    ```sh
-   npx wrangler d1 execute photo_blog --remote --file=./migrations/0001_init.sql
+   npx wrangler d1 execute astro-photo-folio --remote --file=./migrations/0001_init.sql
    ```
 
 3. (Recommended) set a private salt for the dedup hash:

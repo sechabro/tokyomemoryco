@@ -1,8 +1,8 @@
 -- D1 schema for the first-party page-view counter.
 --
 -- Apply once after creating the database:
---   npx wrangler d1 create photo_blog
---   npx wrangler d1 execute photo_blog --remote --file=./migrations/0001_init.sql
+--   npx wrangler d1 create astro-photo-folio
+--   npx wrangler d1 execute astro-photo-folio --remote --file=./migrations/0001_init.sql
 -- (drop --remote to seed a local dev copy instead.)
 
 -- One row per path: the running total shown in the footer.

@@ -3,8 +3,8 @@
 # first-party page-view counter at /api/views (backed by D1). Deploy: npx wrangler deploy
 # (The _headers file emitted into ./dist is honored for response headers.)
 #
-# Rename "photography-blog" to whatever you like — it's your Worker's name.
-name = "photography-blog"
+# Rename "astro-photo-folio" to whatever you like — it's your Worker's name.
+name = "astro-photo-folio"
 main = "worker/index.js"
 compatibility_date = "2025-06-01"
 
@@ -19,8 +19,8 @@ binding = "ASSETS"
 
 # D1 database for the page-view counts. Create it once, then paste the printed id
 # into database_id below (see the README, "View counts"):
-#   npx wrangler d1 create photo_blog
-#   npx wrangler d1 execute photo_blog --remote --file=./migrations/0001_init.sql
+#   npx wrangler d1 create astro-photo-folio
+#   npx wrangler d1 execute astro-photo-folio --remote --file=./migrations/0001_init.sql
 # Optional (recommended): a private salt for the dedup hash:
 #   npx wrangler secret put VIEW_SALT
 #
@@ -28,7 +28,7 @@ binding = "ASSETS"
 # footer view counter simply stays hidden.
 [[d1_databases]]
 binding = "DB"
-database_name = "photo_blog"
+database_name = "astro-photo-folio"
 database_id = ""
 
 # Daily cleanup of the short-lived dedup table (keeps only the current UTC day).
