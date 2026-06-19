@@ -3,9 +3,8 @@
 A minimal, fast photography portfolio with two blogs and a fixed left-hand
 navigation (**Digital · Analog · Calendar · Tech Blog · Photo Blog · About ·
 Contact · License**) and responsive photo galleries. Built with
-[Astro](https://astro.build) and deployable on
-[Cloudflare](https://developers.cloudflare.com/workers/static-assets/) — static
-pages plus a tiny optional Worker that powers a first-party page-view counter.
+[Astro](https://astro.build) and output as a fully static site you can deploy to
+any static host (Netlify, Vercel, GitHub Pages, Cloudflare Pages, S3/CDN, …).
 
 It ships with **tasteful, generated placeholder images and example posts**, so it
 looks complete the moment you run it. Swap in your own name, links, and photos
@@ -14,8 +13,7 @@ and you have a finished site.
 - **Digital** is the home page — your digital photographs.
 - **Analog** is a second gallery for film work.
 - **Calendar** shows one photo per month, newest first.
-- **Tech Blog** and **Photo Blog** are Markdown/MDX blogs with a share button and
-  an optional per-page view count.
+- **Tech Blog** and **Photo Blog** are Markdown/MDX blogs with a share button.
 - **About / Contact / License / Privacy** are simple, editable pages.
 - Layout adapts from a sidebar (desktop) to a top bar + menu (tablet & phone).
 - Click any photo for a full-screen lightbox (arrow keys / swipe-friendly).
@@ -50,8 +48,9 @@ npm run build
 npm run preview
 ```
 
-> Security headers in `public/_headers` are applied by Cloudflare, so they won't
-> appear under `npm run preview` — that's expected.
+> Security headers in `public/_headers` are applied by your static host (e.g.
+> Netlify or Cloudflare Pages), so they won't appear under `npm run preview` —
+> that's expected.
 
 ---
 
@@ -237,65 +236,7 @@ comments at the top of `global.css`.
 
 ---
 
-## 5. Blog: view counts, sharing & comments
-
-### View counts (first-party, Cloudflare D1) — optional
-
-Every page can show a **"Page Viewed N"** total in the footer, served entirely
-from your own domain: a small Worker (`worker/index.js`) backed by a
-[Cloudflare D1](https://developers.cloudflare.com/d1/) database — no third-party
-analytics. It's privacy-friendly: no cookies, no raw IP/User-Agent stored, repeat
-views de-duplicated per IP/day with a salted hash that a daily cron discards, and
-crawlers make no database call at all.
-
-**One-time setup on Cloudflare** (comfortably within the free tier):
-
-1. **Create the database**, then paste the printed `database_id` into the
-   `[[d1_databases]]` block in `wrangler.toml`:
-
-   ```sh
-   npx wrangler d1 create astro-photo-folio
-   ```
-
-2. **Create the tables** from the migration:
-
-   ```sh
-   npx wrangler d1 execute astro-photo-folio --remote --file=./migrations/0001_init.sql
-   ```
-
-3. (Recommended) set a private salt for the dedup hash:
-
-   ```sh
-   npx wrangler secret put VIEW_SALT
-   ```
-
-4. **Deploy** (or just push, if the repo is connected to Cloudflare):
-
-   ```sh
-   npm run build && npx wrangler deploy
-   ```
-
-Until `database_id` is filled in, the site still builds and serves normally — the
-footer counter simply stays hidden. The wording/placement live in the
-`.site-footer__views` markup in `src/layouts/Layout.astro`; the counting logic
-lives in `worker/index.js`.
-
-**Abuse-resistance.** The endpoint is public (every visitor's browser calls it), so
-it's hardened in `worker/index.js`: it counts a path only if it resolves to a real
-HTML page (no junk rows in `page_views`), de-duplicates per IP + path + day (so
-rotating the `User-Agent` can't re-count), and honors two optional Workers
-rate-limit bindings already declared in `wrangler.toml` (`RATE_LIMITER` per client,
-`GLOBAL_LIMITER` as a whole-endpoint backstop). Both checks are skipped
-automatically if their binding is absent, so local dev still works.
-
-> Don't want the counter at all? You can ignore `wrangler.toml`/`worker/` and
-> deploy the static `dist/` to any static host — the footer counter just stays
-> hidden.
-
-### Private analytics (optional): Cloudflare Web Analytics
-
-For your own dashboard, enable **Web Analytics** in the Cloudflare dashboard. The
-CSP in `public/_headers` already allows its beacon.
+## 5. Blog: sharing & comments
 
 ### Share button
 
@@ -322,11 +263,10 @@ staying **out of AI training sets**.
 
 - **Crawler stance** (`src/pages/robots.txt.ts`): search + AI *search/citation*
   crawlers are allowed; AI *training* / bulk crawlers (`GPTBot`, `CCBot`,
-  `ClaudeBot`, …) are blocked. Edit the `ALLOW` / `BLOCK` lists to change it. The
-  block list is also **enforced** at the edge when the Worker is deployed:
-  `worker/index.js` (`BLOCKED_BOT_RE`) returns `403` to those crawlers, so one that
-  ignores `robots.txt` still can't download pages or images. (Search engines, incl.
-  Google Images, aren't on the list and pass through untouched.)
+  `ClaudeBot`, …) are blocked. Edit the `ALLOW` / `BLOCK` lists to change it.
+  `robots.txt` is advisory; if your host or CDN can block by User-Agent, you can
+  additionally enforce the block list there. (Search engines, incl. Google Images,
+  aren't on the list and pass through untouched.)
 - **Sitemap** via `@astrojs/sitemap`, linked from `robots.txt`.
 - **`llms.txt`** (`src/pages/llms.txt.ts`): a curated Markdown index for AI tools
   (see https://llmstxt.org/).
@@ -337,20 +277,22 @@ staying **out of AI training sets**.
 - **Photo SEO is text-driven** — name files descriptively (`lake-fog.jpg`, not
   `IMG_2451.jpg`): the name becomes the image's `alt` text.
 
-> `robots.txt` is advisory; the edge enforcement above (when the Worker is
-> deployed) covers the block list. The `Cross-Origin-Resource-Policy` header also
-> blocks other sites from hot-linking your images.
+> `robots.txt` is advisory. The `Cross-Origin-Resource-Policy` header (in
+> `public/_headers`) also blocks other sites from hot-linking your images on hosts
+> that apply it.
 
 ---
 
 ## 7. Security & privacy
 
 - **Content-Security-Policy** served as an HTTP header from `public/_headers`:
-  `default-src 'self'` locks scripts/styles/images/fonts to the same origin. The
-  only third-party allowance is Cloudflare Web Analytics.
+  `default-src 'self'` locks scripts/styles/images/fonts to the same origin, with
+  no third-party allowances.
 - Security headers in `public/_headers`: `X-Frame-Options`,
   `Cross-Origin-Resource-Policy` (anti-hotlinking), HSTS, `X-Content-Type-Options`,
-  `Referrer-Policy`, `Permissions-Policy`. These apply once served by Cloudflare.
+  `Referrer-Policy`, `Permissions-Policy`. These apply once served by a host that
+  honors `_headers` (e.g. Netlify, Cloudflare Pages), or once you translate them
+  into your web server's config.
 - **Privacy policy** at `src/pages/privacy.astro` — a sensible, cookieless
   default. Review and adjust it for your jurisdiction before publishing.
 
@@ -369,38 +311,46 @@ staying **out of AI training sets**.
 
 ---
 
-## 9. Deploy to Cloudflare Workers (Static Assets)
+## 9. Deploy
 
-The site's pages are served from `./dist` as a Cloudflare Workers static-assets
-deployment, alongside the optional Worker (`worker/index.js`) for the
-`/api/views` counter (see §5).
+`npm run build` outputs a plain, fully static site to `dist/` — deploy that
+directory to any static host. There's no server runtime, database, or
+host-specific configuration to maintain.
 
-### Option A — Connect your Git repo (recommended)
+### Connect your Git repo (recommended)
 
-1. Push this repository to GitHub.
-2. Cloudflare dashboard → **Workers & Pages → Create → Workers → Connect to Git**.
-3. Pick the repo. Confirm the build settings:
-   - **Build command:** `npm run build`
-   - **Deploy command:** `npx wrangler deploy`
-4. **Save and Deploy.** Every push then redeploys automatically.
+Most static hosts can build straight from GitHub. Push this repository, then
+point your host at it with these settings:
 
-### Option B — Wrangler CLI
+- **Build command:** `npm run build`
+- **Output / publish directory:** `dist`
+- **Node version:** `22` (matches `.nvmrc`)
+
+Every push then rebuilds and redeploys automatically. This works on Netlify,
+Vercel, Cloudflare Pages, GitHub Pages (via an action), and similar.
+
+### Build locally and upload
 
 ```bash
-npm run build
-npx wrangler deploy              # uses wrangler.toml ([assets] directory = ./dist)
+npm run build         # → dist/
 ```
+
+Then publish `dist/` however you like — drag-and-drop to a host, `rsync` to a
+server, or sync to an object store (e.g. S3) behind a CDN.
+
+### Response headers (optional)
+
+`public/_headers` carries the Content-Security-Policy and other security headers.
+Hosts such as Netlify and Cloudflare Pages apply it automatically; on Nginx,
+Apache, or S3/CloudFront, translate those rules into the server/CDN config (see
+§7). The site works without them — they're hardening, not a requirement.
 
 ### Custom domain
 
-Add it under your project → **Custom domains**, then set `site` in
-`astro.config.mjs` to that URL (see §2.6). After deploying, submit
+Add your domain in your host's dashboard, then set `site` in `astro.config.mjs`
+to that URL (see §2.6). After deploying, submit
 `https://your-domain/sitemap-index.xml` to Google Search Console and Bing
 Webmaster Tools.
-
-> **Just want static hosting?** Since `npm run build` outputs a plain static site
-> to `dist/`, you can deploy it to any static host (Netlify, GitHub Pages, etc.).
-> You only need Cloudflare Workers + D1 if you want the built-in view counter.
 
 ---
 
@@ -432,8 +382,6 @@ scripts/
 ├── generate-icons.mjs            # derives seal + favicons from the sources
 ├── generate-placeholders.mjs     # placeholder photos + OG share image
 └── strip-unreferenced-assets.mjs # post-build: removes orphaned originals
-worker/index.js          # ← optional Worker for the /api/views counter (D1-backed)
-migrations/0001_init.sql # ← D1 schema for the view counter
 ```
 
 ---
