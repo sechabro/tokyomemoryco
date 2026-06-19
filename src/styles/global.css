@@ -299,7 +299,7 @@ a {
   color: var(--muted);
   font-size: 0.8rem;
   letter-spacing: 0;
-  /* Keep each item (e.g. "Page Viewed 12,345,678") from breaking mid-text. */
+  /* Keep each footer item (© line, links) from breaking mid-text. */
   white-space: nowrap;
 }
 
@@ -756,8 +756,8 @@ a {
   color: #2b2b29;
 }
 
-/* Meta row (date · reading time · views) — separators are drawn with ::before
-   so a hidden view counter never leaves a dangling dot. */
+/* Meta row (date · reading time) — separators are drawn with ::before so an
+   absent item (e.g. a post without a reading time) never leaves a dangling dot. */
 .post__meta,
 .post-card__meta {
   display: flex;

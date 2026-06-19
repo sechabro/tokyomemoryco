@@ -54,7 +54,7 @@ console.log(greet('world'));
 | -------------- | ------------------------------------ |
 | Galleries      | `src/assets/` + `src/data/`          |
 | Blog posts     | `src/content/`                       |
-| View counter   | `worker/index.js` + `migrations/`    |
+| Styling        | `src/styles/global.css`              |
 | SEO / sitemap  | derived from `astro.config.mjs`      |
 
 That's the whole idea: edit text and drop in images, and the site keeps itself

@@ -40,6 +40,3 @@ export const social = {
   linkedin: 'https://www.linkedin.com/in/yourusername',
   github: 'https://github.com/yourusername',
 };
-
-// Page views are counted first-party via the Cloudflare Worker + D1
-// (worker/index.js + migrations/) — there is no analytics config to set here.

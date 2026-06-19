@@ -14,10 +14,10 @@ const ALLOW = [
   'Claude-User',
 ];
 
-// Blocked: AI training / bulk dataset crawlers (incl. image scrapers). This is
-// also ENFORCED at the edge — the Worker (worker/index.js, BLOCKED_BOT_RE) returns
-// 403 to these User-Agents, so ignoring the rule below still gets them no pages
-// and no images. Keep the two lists in sync.
+// Blocked: AI training / bulk dataset crawlers (incl. image scrapers). robots.txt
+// is advisory — well-behaved crawlers honor it, but it can't force one that
+// ignores it. If your host or CDN can block by User-Agent, you can additionally
+// enforce this list there.
 const BLOCK = [
   'GPTBot',
   'ClaudeBot',
@@ -54,8 +54,7 @@ export const GET: APIRoute = ({ site }) => {
     ...ALLOW.map((bot) => `User-agent: ${bot}`),
     'Allow: /',
     '',
-    '# Blocked AI training / bulk-scraping crawlers (pages and images alike). Also',
-    '# enforced at the edge, so ignoring this still gets them nothing.',
+    '# Blocked AI training / bulk-scraping crawlers (pages and images alike).',
     ...BLOCK.map((bot) => `User-agent: ${bot}`),
     'Disallow: /',
     '',
