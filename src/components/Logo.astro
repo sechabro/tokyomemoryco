@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import sealLight from '../assets/seal.png';
-import sealDark from '../assets/seal-dark.png';
+import sealLight from '../assets/tmc_round_alpha.png';
+import sealDark from '../assets/tmc_round_alpha.png';
 
 interface Props {
   class?: string;
@@ -13,6 +13,7 @@ const base = className ? `${className} ` : '';
 {/* Both variants are rendered; CSS shows the one matching the active theme. */}
 <Image
   class={`${base}brand__mark--light`}
+  style="width: 180px; height: auto; max-width: none;"
   src={sealLight}
   alt=""
   widths={[200, 400, 600]}
@@ -22,6 +23,7 @@ const base = className ? `${className} ` : '';
 />
 <Image
   class={`${base}brand__mark--dark`}
+  style="width: 180px; height: auto; max-width: none;"
   src={sealDark}
   alt=""
   widths={[200, 400, 600]}

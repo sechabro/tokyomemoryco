@@ -6,43 +6,37 @@ import { site, social } from "../config";
 // The little "fact" cards are just example fields — rename them, add more, or
 // remove the whole block if you prefer plain prose.
 const facts = [
-    { label: "Currently", line: "Photographer & writer", muted: "Your City, Country" },
-    { label: "Shooting", line: "Digital & 35mm film", muted: "Landscapes, travel, the everyday" },
-    { label: "Since", line: "20XX", muted: "Always learning" },
+    { label: "Locations", line: "We shoot three locations weekly:", muted: "Shibuya, Shinjuku, Asakusa" },
+    { label: "Offerings", line: "1-2 hour photo sessions, day or night", muted: "Individual or group. Max 4 people" },
+    { label: "Additional Services", line: "Custom locations, color grading", muted: "You can pick any location within Tokyo's 23 wards for an additional fee. We also offer color grading services." },
 ];
 ---
 
 <Layout
     title="About"
-    description={`About ${site.name} — photographer and writer.`}
+    description={`About ${site.name} — Tokyo Street Portrait Photography.`}
 >
     <article class="page prose">
         <h1 class="page__title">About</h1>
 
         <p class="lede">
-            I'm {site.name} — a photographer and writer, and the person behind
-            the pictures on this site.
+            Your Tokyo story deserves more than a selfie stick. Welcome to 
+            <strong>Tokyo Memory Co.</strong>, where we turn your 
+            journey through Tokyo into beautiful, professional street portraits.
         </p>
 
         <p>
-            This is placeholder copy from the template. Write a few short
-            paragraphs about yourself here: where you're based, what draws you to
-            photography, the cameras or film you like, and what you tend to point
-            a lens at. Keep it personal and brief — a paragraph or three is
-            plenty.
+            Tokyo is vibrant neon one moment, cinematic and hazy the next. As we
+            explore some of the city's most iconic corners together, we combine 
+            the artistry of professional street photography with the speed of 
+            today's digital age.
         </p>
 
         <p>
-            Photography is how I slow down and pay attention — to light, weather,
-            and the quiet shape of a place. The galleries here gather what I've
-            seen along the way.
-        </p>
-
-        <p>
-            I write here, too: a <a href="/blog/tech">Tech Blog</a> for notes on
-            tools and building for the web, and a
-            <a href="/blog/photography">Photo Blog</a> of field notes on light,
-            places, and the craft of photography.
+            The best part? No waiting weeks for a download link. We just focus on 
+            capturing you at your absolute best, <em>in-camera</em>. Just scan a 
+            personalized QR code at the end of your session and download your 
+            high-resolution gallery immediately.
         </p>
 
         <div class="facts">
@@ -56,7 +50,8 @@ const facts = [
                 ))
             }
         </div>
-
+        
+        <!--
         <p>
             <a
                 class="text-link"
@@ -67,5 +62,6 @@ const facts = [
                 Find me elsewhere →
             </a>
         </p>
+        -->
     </article>
 </Layout>

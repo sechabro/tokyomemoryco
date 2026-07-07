@@ -2,7 +2,7 @@
 import type { ImageMetadata } from 'astro';
 import { renderPhoto, GRID_SIZES } from '../lib/photos';
 import Lightbox from './Lightbox.astro';
-import { calendar } from '../data/calendar';
+import { location } from '../data/locations';
 import { site as siteInfo } from '../config';
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
@@ -21,18 +21,18 @@ const MONTHS = [
 
 // Evaluated at build time: show every calendar photo we have, newest first.
 const items = await Promise.all(
-  calendar
+  location
     .filter((e) => byName.has(e.file)) // only entries whose image is present
     // Newest first; same-month ties sort Z→A by location ("a…" below "z…").
-    .sort((a, b) => b.year - a.year || b.month - a.month || b.location.localeCompare(a.location))
+    //.sort((a, b) => b.year - a.year || b.month - a.month || b.location.localeCompare(a.location))
+    .sort((a, b) => a.location.localeCompare(b.location))
     .map(async (e) => {
       const photo = await renderPhoto(byName.get(e.file)!);
       return {
         ...photo,
-        label: `${MONTHS[e.month - 1]} ${e.year}, ${e.location}`,
-        year: e.year,
-        month: e.month,
+        label: `${e.location}`,
         location: e.location,
+        description: e.description
       };
     })
 );
@@ -42,7 +42,7 @@ const base = Astro.site ? Astro.site.href.replace(/\/$/, '') : '';
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ImageGallery',
-  name: `Calendar — ${siteInfo.name}`,
+  name: `Locations — ${siteInfo.name}`,
   url: `${base}${Astro.url.pathname}`,
   isPartOf: { '@id': `${base}/#website` },
   author: { '@id': `${base}/#person` },
@@ -66,11 +66,11 @@ const jsonLd = {
 {
   items.length === 0 ? (
     <p class="empty">
-      No calendar photos yet. Add entries in <code>src/data/calendar.ts</code> and images in
-      <code>src/assets/calendar/</code>.
+      No location photos yet. Add entries in <code>src/data/locations.ts</code> and images in
+      <code>src/assets/locations/</code>.
     </p>
   ) : (
-    <section class="calendar-grid" aria-label="Calendar photographs">
+    <section class="calendar-grid" aria-label="Location photographs">
       {items.map((item, i) => (
         <figure class="calendar-item">
           <button

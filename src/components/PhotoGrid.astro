@@ -6,7 +6,7 @@ import { site as siteInfo } from '../config';
 import { digital as digitalMeta, analog as analogMeta, type GalleryPhoto } from '../data/galleries';
 
 interface Props {
-  collection: 'digital' | 'analog';
+  collection: 'digital' | 'analog' | 'portraits';
 }
 const { collection } = Astro.props;
 
@@ -23,7 +23,13 @@ const analog = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true }
 );
 
-const files = collection === 'analog' ? analog : digital;
+const portraits = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/portraits/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}',
+  { eager: true }
+);
+
+// Replace the old "const files = collection === 'analog' ? analog : digital;" with this:
+const files = collection === 'analog' ? analog : collection === 'portraits' ? portraits : digital;
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -34,9 +40,17 @@ const MONTHS = [
 // caption renders as "Month Year, Location" — the same format as the Calendar —
 // shown under each photo and in the lightbox. It stays empty until a location is
 // filled in, so an un-described photo simply shows on its own.
+
+// Define a temporary fallback or check for portraits
+const activeMetaArray = collection === 'analog' ? analogMeta : collection === 'portraits' ? [] : digitalMeta;
+
 const meta = new Map<string, GalleryPhoto>(
-  (collection === 'analog' ? analogMeta : digitalMeta).map((e) => [e.file, e])
+  activeMetaArray.map((e) => [e.file, e])
 );
+
+//const meta = new Map<string, GalleryPhoto>(
+//  (collection === 'analog' ? analogMeta : digitalMeta).map((e) => [e.file, e])
+//);
 
 // Order by the described date, newest first, so adding an older photo never
 // requires renumbering files. Within the same month + year, descriptions sort
@@ -56,10 +70,10 @@ const entries = Object.entries(files).sort(([pathA], [pathB]) => {
 function describe(e: GalleryPhoto | undefined): string {
   if (!e) return '';
   const loc = e.location.trim();
-  const date =
-    e.month >= 1 && e.month <= 12 && e.year > 0 ? `${MONTHS[e.month - 1]} ${e.year}` : '';
-  if (date && loc) return `${date}, ${loc}`;
-  return date || loc;
+  //const date =
+  //  e.month >= 1 && e.month <= 12 && e.year > 0 ? `${MONTHS[e.month - 1]} ${e.year}` : '';
+  //if (date && loc) return `${date}, ${loc}`;
+  return loc;
 }
 
 // Fallback alt text from the filename ("01-snowy-harbor.jpg" -> "Snowy harbor")
@@ -76,7 +90,11 @@ const photos = await Promise.all(
     const photo = await renderPhoto(mod.default);
     const entry = meta.get(path.split('/').pop()!);
     const caption = describe(entry);
-    return { ...photo, caption, alt: caption || captionFor(path, i), entry };
+    return { ...photo, 
+              caption, 
+              alt: caption || captionFor(path, i), 
+              entry,
+              };
   })
 );
 

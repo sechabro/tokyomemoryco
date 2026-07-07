@@ -23,9 +23,10 @@ export const site = {
 // Left-hand navigation. "Digital" is the home page and shows by default.
 export const nav: NavItem[] = [
   { label: 'Welcome', href: '/' },
-  { label: 'Book a Shoot', href: '/calendar' },
+  { label: 'Book a Shoot', href: 'https://app.acuityscheduling.com/schedule.php?owner=39694284' },
+  {label: 'Locations & Services', href: '/locations'},
   { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Contact', href: '/contact' }
 ];
 
 // Social / external links shown in the sidebar and on the contact page. Replace
