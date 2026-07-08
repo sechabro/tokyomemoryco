@@ -1,9 +1,122 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PhotoGrid from '../components/PhotoGrid.astro';
+import heroBanner from '../assets/tokyo_memory_co_rectangle.png'
 ---
 
 <Layout>
-  <h1 class="gallery-label">Tokyo Memory Co — Street Portrait Sessions in Tokyo.</h1>
-  <PhotoGrid collection="portraits" />
+  <header class="hero">
+    <!-- 1. Your Rectangular Asset Centerpiece (Hidden on vertical mobile viewports) -->
+    <div class="hero__graphic-wrapper hidden-mobile">
+      <img 
+        src={heroBanner.src} 
+        alt="Tokyo Memory Co. Wide Cinematic Frame" 
+        class="hero__graphic"
+        loading="eager" 
+      />
+    </div>
+
+    <!-- 2. Centered Bold Statement Block -->
+    <div class="hero__content">
+      <span class="hero__brand-tag">Tokyo Memory Co</span>
+      <h1 class="hero__statement">Street portrait photo sessions in Tokyo.</h1>
+    </div>
+  </header>
+
+  <!-- 3. The Pristine Gallery Grid Below -->
+  <main class="main-content">
+    <PhotoGrid collection="portraits" />
+  </main>
 </Layout>
+
+
+<style>
+  /* Base Hero Layout */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem 1rem 3rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Rectangular Logo Frame Layout */
+  .hero__graphic-wrapper {
+    width: 100%;
+    max-width: 750px;
+    margin-bottom: 1.25rem; /* Tight gap beneath the logo asset */
+    overflow: hidden;
+    border-radius: 2px;
+  }
+
+  .hero__graphic {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Typography Component Stack */
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    max-width: 900px; /* Restricts line length for elegant display reading */
+  }
+
+  /* Small Subtle Over-title */
+  .hero__brand-tag {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: inherit;
+  }
+
+  /* Large Statement Typography */
+  .hero__statement {
+    font-family: var(--serif-display, serif);
+    font-size: 3.4rem;
+    font-weight: 700;
+    line-height: 1.1; /* Tight editorial vertical spacing */
+    letter-spacing: -0.03em;
+    color: inherit;
+    margin: 0;
+  }
+
+  /* Lower Layout Buffer */
+  .main-content {
+    margin-top: 1.5rem;
+  }
+
+  /* ==========================================
+     INTELLIGENT VIEWPORT Breakpoints
+     ========================================== */
+
+  /* Mobile/Vertical Screen Rules */
+  @media (max-width: 1023px) {
+    .hero {
+      padding: 1.5rem 1rem 2.5rem 1rem;
+    }
+
+    /* Completely hide the header graphic to eliminate sidebar redundancy */
+    .hidden-mobile {
+      display: none !important;
+    }
+
+    .hero__statement {
+      font-size: 2.1rem;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    
+    .main-content {
+      margin-top: 0.5rem;
+    }
+  }
+
+
+</style>

@@ -48,20 +48,25 @@ const isActive = (href: string) => {
       <span class="nav-toggle__label">Menu</span>
     </button>
 
-    <nav id="primary-nav" class="nav" aria-label="Primary">
+<nav id="primary-nav" class="nav" aria-label="Primary">
       <ul class="nav__list">
         {
-          nav.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class:list={['nav__link', { 'is-active': isActive(item.href) }]}
-                aria-current={isActive(item.href) ? 'page' : undefined}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))
+          nav.map((item) => {
+            const isExternal = item.href.startsWith('http');
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={['nav__link', { 'is-active': !isExternal && isActive(item.href) }]}
+                  aria-current={(!isExternal && isActive(item.href)) ? 'page' : undefined}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
         }
       </ul>
     </nav>

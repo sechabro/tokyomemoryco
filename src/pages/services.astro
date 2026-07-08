@@ -1,0 +1,111 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { site, social } from "../config";
+
+// ── Edit everything below to tell your own story. ───────────────────────────
+// The little "fact" cards are just example fields — rename them, add more, or
+// remove the whole block if you prefer plain prose.
+const facts = [
+    { label: "Standard Sessions", 
+      line1: "1-2 hour photo sessions, day or night, at one of six locations we serve.",
+      line2: "Price range of $160-$270. 30-50 photos delivered.",    
+      muted: "Individual or group, with a maximum of 4 people."
+    },
+    { label: "Human Interest", 
+      line1: "A full, 8-hour photo session, documenting your Tokyo experience.",
+      line2: "$800 with a 30 minute break. 200-250 photos delivered.",
+      muted: "We follow along where you go, anywhere within Tokyo." },
+];
+
+// Swap this with your main Acuity scheduler landing page or catalog link
+const generalBookingUrl = "https://app.acuityscheduling.com/schedule.php?owner=39694284";
+---
+
+<Layout
+    title="Services"
+    description={`Services ${site.name} — Tokyo Street Portrait Photography.`}
+>
+    <article class="page prose">
+        <h1 class="page__title">How We Work</h1>
+
+        <p class="lede">
+            Our photographers focus on capturing you at your absolute best, <em>in-camera</em>.
+            The moment your session ends, scan your personalized QR code and instantly download 
+            your high-resolution gallery right there on-site.
+        </p>
+        <p>
+            
+        </p>
+
+        <div class="facts">
+            {
+                facts.map((f) => (
+                    <section class="fact">
+                        <h2 class="fact__label">{f.label}</h2>
+                        <p class="fact__line">{f.line1}</p>
+                        <p class="fact__line">{f.line2}</p>
+                        <p class="fact__muted">{f.muted}</p>
+                    </section>
+                ))
+            }
+        </div>
+        
+        <!-- The Clean Monochrome Conversion Button Anchor -->
+        <div class="services-action-container">
+            <a 
+                href={generalBookingUrl} 
+                class="services__book-btn" 
+                target="_blank" 
+                rel="noopener noreferrer"
+            >
+                Book Your Photo Shoot
+            </a>
+        </div>
+
+        <!--
+        <p>
+            <a
+                class="text-link"
+                href={social.github}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Find me elsewhere →
+            </a>
+        </p>
+        -->
+    </article>
+</Layout>
+
+<style>
+
+
+  /* 2. Position the booking block cleanly at the bottom */
+  .services-action-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  /* 3. Replicate your premium lightbox button aesthetic */
+  .services__book-btn {
+    display: inline-block;
+    background-color: #c9c9c9;
+    color: #000000;
+    padding: 0.85rem 2.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    text-align: center;
+  }
+
+  .services__book-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+</style>
