@@ -1,0 +1,202 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <main class="faq-container">
+    <header class="faq-header">
+      <span class="faq-subtitle">Common Questions</span>
+      <h1 class="faq-title">Frequently Asked Questions</h1>
+    </header>
+
+    <div class="faq-grid">
+      <!-- Category: Booking & Logistics -->
+      <section class="faq-section">
+        <h2 class="faq-section__title">Sessions & Logistics</h2>
+        <details class="faq-item">
+          <summary class="faq-item__question">What happens if it rains/snows on the day of the shoot?</summary>
+          <div class="faq-item__answer">
+            <p>Tokyo looks incredible when wet, especially at night with all those
+            neon reflections. In the middle of a rain shower, however, things can be
+            tricky. We offer a no-worries cancellation & refund of the shoot if the
+            weather is severe. If weather unexpectedly becomes severe mid-shoot, we
+            can shift to semi-covered corridors and alleys. </p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-item__question">Where do we meet to begin our shoot?</summary>
+          <div class="faq-item__answer">
+            <p>
+            After booking, you will receive an email with the exact meeting location
+            and any additional instructions for us to meet easily.
+            </p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-item__question">Why do you limit short sessions to four people?</summary>
+          <div class="faq-item__answer">
+            <p>
+            While a cutoff of four people might seem arbitrary, it's based on
+            session pacing and available lighting (both ambient and flash).
+            Restricting the group size ensures that every single person in the 
+            session receives enough individual coverage without the shoot ever 
+            feeling rushed or compromised.
+            </p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-item__question">What is the 8-Hour "Human Interest" session?</summary>
+          <div class="faq-item__answer">
+            <p>The Human Interest shoot is a full-day, documentary-style session. 
+            Instead of a structured portrait shoot, I blend into your day and 
+            document your experiences, movements, and interactions across the city 
+            photographically, creating an authentic visual record of your time in 
+            Tokyo.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Category: Payments, Changes & Business Terms (Bank Friendly) -->
+      <section class="faq-section">
+        <h2 class="faq-section__title">Rates, Payments & Cancellations</h2>
+        
+        <details class="faq-item">
+          <summary class="faq-item__question">What are your payment and cancellation policies?</summary>
+          <div class="faq-item__answer">
+            <p>Bookings are managed securely through Acuity Scheduling. We require
+            payment in advance for all sessions. Cancellations must be made no later
+            than 24 hours prior to a client's session. We implement these two policies
+            to protect our photographers' time and schedule. Thank you in advance for
+            respecting our policy.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-item__question">Do you provide commercial licensing for the images?</summary>
+          <div class="faq-item__answer">
+            <p>Our standard packages cover personal use (portfolios, social media, prints). If you require images for commercial use, advertising, or corporate branding, please contact us prior to booking to arrange a commercial licensing agreement.</p>
+          </div>
+        </details>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem 1.5rem;
+  }
+
+  .faq-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .faq-subtitle {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted, #71717a);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .faq-title {
+    font-family: var(--serif-display, serif);
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: inherit;
+    margin: 0;
+  }
+
+  .faq-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  .faq-section__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted, #71717a);
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(125, 125, 125, 0.15);
+    padding-bottom: 0.5rem;
+  }
+
+  /* Native Accordion Styling */
+  .faq-item {
+    border-bottom: 1px solid rgba(125, 125, 125, 0.1);
+    padding: 1.25rem 0;
+    cursor: pointer;
+  }
+
+  /* Smooth layout states */
+  .faq-item[open] {
+    padding-bottom: 1.5rem;
+  }
+
+  .faq-item__question {
+    font-size: 1.2rem;
+    font-weight: 500;
+    list-style: none; /* Hides default browser disclosure triangle */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: inherit;
+    user-select: none;
+  }
+
+  /* Custom minimal indicator (+ / -) */
+  .faq-item__question::after {
+    content: '+';
+    font-family: monospace;
+    font-size: 1.2rem;
+    color: var(--muted, #a1a1aa);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] .faq-item__question::after {
+    content: '−';
+  }
+
+  /* Hide default Safari arrow */
+  .faq-item__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item__answer {
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--muted, #a1a1aa);
+    max-width: 600px;
+  }
+
+  .faq-item__answer p {
+    margin: 0;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 640px) {
+    .faq-container {
+      padding: 2.5rem 1rem 4rem 1rem;
+    }
+    .faq-title {
+      font-size: 2.1rem;
+    }
+    .faq-item__question {
+      font-size: 1.05rem;
+    }
+    .faq-item__answer {
+      font-size: 0.95rem;
+    }
+  }
+</style>

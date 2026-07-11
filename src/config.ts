@@ -26,6 +26,7 @@ export const nav: NavItem[] = [
   { label: 'Book a Shoot', href: 'https://app.acuityscheduling.com/schedule.php?owner=39694284' },
   {label: 'Locations', href: '/locations'},
   { label: 'Services', href: '/services' },
+  {label: 'FAQ', href: '/faq'},
   { label: 'Contact', href: '/contact' }
 ];
 
