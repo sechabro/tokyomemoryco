@@ -94,8 +94,11 @@ const jsonLd = {
               decoding="async"
               draggable={false}
             />
-          </button>
+            <div class="photo-tile__overlay">
           <figcaption class="calendar-caption">{item.label}</figcaption>
+            </div>
+          </button>
+          
         </figure>
       ))}
     </section>
@@ -105,3 +108,76 @@ const jsonLd = {
 <Lightbox />
 
 <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+<style>
+  .calendar-item {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .photo-tile {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .photo__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  /* Keep the slick movement on hover without changing image exposure */
+  .photo-tile:hover .photo__img {
+    transform: scale(1.04);
+  }
+
+  /* Clear transparent overlay layer centered vertically and horizontally */
+  .photo-tile__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;     /* Centers vertically */
+    justify-content: center;  /* Centers horizontally */
+    padding: 1.5rem;
+    background: transparent;  /* Removed the dimming gradient entirely */
+  }
+
+  /* Large, bold, perfectly centered typography */
+  .calendar-caption {
+    font-family: var(--serif-display, serif);
+    font-size: 3.5rem; /* Noticeably scaled up for premium editorial impact */
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+    
+    /* High-fidelity legibility protector against light backgrounds */
+    text-shadow: 
+      0px 1px 2px rgba(0, 0, 0, 0.7),    /* Tight rim anchor */
+      0px 3px 6px rgba(0, 0, 0, 0.5),    /* Soft downward drop */
+      0px 0px 15px rgba(0, 0, 0, 0.4),   /* Radial ambient glow (Left/Right safety) */
+      0px -2px 8px rgba(0, 0, 0, 0.35);
+      
+    transition: transform 0.3s ease;
+  }
+
+  /* Interactive pop state when hovered */
+  .photo-tile:hover .calendar-caption {
+    transform: scale(1.05);
+  }
+
+  /* Mobile responsiveness scaling overrides */
+  @media (max-width: 640px) {
+    .calendar-caption {
+      font-size: 1.5rem; /* Scales down gracefully on smaller screens */
+    }
+  }
+</style>
