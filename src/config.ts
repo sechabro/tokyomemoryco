@@ -23,6 +23,7 @@ export const site = {
 // Left-hand navigation. "Digital" is the home page and shows by default.
 export const nav: NavItem[] = [
   { label: 'Welcome', href: '/' },
+  {label: 'About Us', href: '/about'},
   { label: 'Book a Shoot', href: 'https://app.acuityscheduling.com/schedule.php?owner=39694284' },
   {label: 'Locations', href: '/locations'},
   { label: 'Services', href: '/services' },

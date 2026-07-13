@@ -1,0 +1,193 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <main class="about-container">
+    <header class="about-header">
+      <span class="about-subtitle">Behind the Lens</span>
+      <h1 class="about-title">The Philosophy</h1>
+    </header>
+
+    <div class="about-grid">
+      <!-- Left Side: Profile Photo / Intro -->
+      <div class="about-profile">
+        <div class="about-image-wrapper">
+          <img 
+            src="/src/assets/portraits/DSC00271_DxO.jpg" 
+            alt="Portrait" 
+            class="about-img"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <p class="about-lead">
+          Travel and street portraiture is an active, collaborative energy between
+          the photographer, the subject, and the city. We want our customers to
+          truly remember Tokyo when they look back on their photo session with us.
+        </p>
+      </div>
+
+      <!-- Right Side: The Bio & Deep Dive -->
+      <div class="about-content">
+        <p>
+          Tokyo Memory Co. was built to document the city and its visitors, not as
+          a postcard, but as a giant landscape, filled with active participants.
+        </p>
+        <p>
+          Our approach centers the focus on you, and your time here. At the
+          end of every session, our photographer will instantly deliver every photo
+          shot, via a QR code.
+
+        </p>
+
+        <div class="about-divider"></div>
+
+        <h2 class="about-section-title">The Approach</h2>
+        
+        <ul class="about-features">
+          <li>
+            <strong>In-Camera Precision & Instant Delivery:</strong> 
+            The magic happens on the street, not hours later at a desk.
+            Our workflow focuses heavily on getting light and composition
+            styling exactly right inside the camera the moment the shutter 
+            clicks. Because the foundation is nailed in-camera, it unlocks a 
+            streamlined pipeline that allows us to deliver your image gallery
+            immediately after our session wraps.
+          </li>
+          <li>
+            <strong>Editorial Quality:</strong> Leveraging a technical background in micro-contrast optimization and meticulous color profiles, every frame is treated like a standalone magazine feature. 
+          </li>
+          <li>
+            <strong>Human Interest:</strong> My long-form sessions are purely documentary. I blend into your day to create an uncompromising, authentic visual record of your experiences and movements across Japan's capital.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .about-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 6rem 1.5rem;
+  }
+
+  .about-header {
+    margin-bottom: 4rem;
+    text-align: left;
+  }
+
+  .about-subtitle {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted, #71717a);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .about-title {
+    font-family: var(--serif-display, serif);
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: inherit;
+    margin: 0;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: rgba(125, 125, 125, 0.05);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-lead {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    font-weight: 500;
+    color: inherit;
+  }
+
+  .about-content {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--muted, #a1a1aa);
+  }
+
+  .about-content p {
+    margin: 0 0 1.5rem 0;
+  }
+
+  .about-divider {
+    height: 1px;
+    background: rgba(125, 125, 125, 0.15);
+    margin: 2.5rem 0;
+  }
+
+  .about-section-title {
+    font-family: var(--serif-display, serif);
+    font-size: 1.6rem;
+    color: inherit;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .about-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .about-features li {
+    position: relative;
+    padding-left: 0;
+  }
+
+  .about-features strong {
+    color: inherit;
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    
+    .about-container {
+      padding: 2.5rem 1rem 4rem 1rem;
+    }
+
+    .about-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .about-title {
+      font-size: 2.2rem;
+    }
+  }
+</style>
