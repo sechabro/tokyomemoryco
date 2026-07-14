@@ -6,7 +6,7 @@ import { site as siteInfo } from '../config';
 import { digital as digitalMeta, analog as analogMeta, type GalleryPhoto } from '../data/galleries';
 
 interface Props {
-  collection: 'digital' | 'analog' | 'portraits';
+  collection: 'digital' | 'analog' | 'portraits' | 'promo';
 }
 const { collection } = Astro.props;
 
@@ -28,8 +28,13 @@ const portraits = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true }
 );
 
+const promo = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/promo/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}',
+  { eager: true }
+);
+
 // Replace the old "const files = collection === 'analog' ? analog : digital;" with this:
-const files = collection === 'analog' ? analog : collection === 'portraits' ? portraits : digital;
+const files = collection === 'analog' ? analog : collection === 'portraits' ? portraits : collection === 'promo' ? promo : digital;
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -42,7 +47,7 @@ const MONTHS = [
 // filled in, so an un-described photo simply shows on its own.
 
 // Define a temporary fallback or check for portraits
-const activeMetaArray = collection === 'analog' ? analogMeta : collection === 'portraits' ? [] : digitalMeta;
+const activeMetaArray = collection === 'analog' ? analogMeta : collection === 'portraits' ? [] : collection === 'promo' ? [] : digitalMeta;
 
 const meta = new Map<string, GalleryPhoto>(
   activeMetaArray.map((e) => [e.file, e])

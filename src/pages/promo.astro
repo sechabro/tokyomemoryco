@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+// Array of your top-tier conversion photos
+// Update these paths to point to your premium Tokyo street frames inside public/images/
+
+---
+
+<Layout>
+  <main class="promo-container">
+    
+    <!-- Top Conversion Block -->
+    <header class="promo-hero">
+      <h1 class="promo-headline">We can shoot you like this too</h1>
+      
+      <!-- Standard Booking Button (Matches your services style) -->
+      <a href="https://app.acuityscheduling.com/schedule.php?owner=39694284" 
+      class="book-now-btn" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      role="button">
+        Book Now
+      </a>
+      
+      <p class="promo-tagline">Shot and delivered same day. No waiting.</p>
+    </header>
+
+    <PhotoGrid collection="promo" />
+
+    <!-- Bottom Conversion Block -->
+    <footer class="promo-footer">
+      
+      <a href="https://app.acuityscheduling.com/schedule.php?owner=39694284" 
+      class="book-now-btn" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      role="button">
+        Book Now
+      </a>
+    </footer>
+
+  </main>
+</Layout>
+
+<style>
+  .promo-container {
+    max-width: 1000px; /* Kept narrow so it scales perfectly on mobile screens */
+    margin: 0 auto;
+    padding: 3rem 1.25rem 5rem 1.25rem;
+    text-align: center;
+  }
+
+  .promo-hero {
+    margin-bottom: 3.5rem;
+  }
+
+  .promo-headline {
+    font-family: var(--serif-display, serif);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: inherit;
+    margin: 0 0 2rem 0;
+  }
+
+  /* Replicated Booking Button Styles */
+  .book-now-btn {
+    display: inline-block;
+    background-color: #c9c9c9;
+    color: #000000;
+    padding: 0.85rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    text-align: center;
+  }
+
+  .book-now-btn:hover,
+  .book-now-btn:focus {
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
+
+  .promo-tagline {
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--muted, #a1a1aa);
+    margin: 1.75rem 0 0 0;
+  }
+
+  /* Single Column Mobile-First Photo Stream */
+  .promo-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* Clean vertical spacing between each image */
+    margin-bottom: 4rem;
+  }
+
+  .promo-photo-wrapper {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: rgba(125, 125, 125, 0.05);
+    overflow: hidden;
+  }
+
+  .promo-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .promo-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .promo-footer .promo-tagline {
+    margin: 0; /* Clear top margin layout for balanced flow */
+  }
+
+  /* Responsive Scaling Adjustments */
+  @media (max-width: 480px) {
+    .promo-container {
+      padding: 2rem 1rem 4rem 1rem;
+    }
+
+    .promo-headline {
+      font-size: 2rem;
+    }
+
+    .promo-tagline {
+      font-size: 1rem;
+    }
+  }
+</style>
