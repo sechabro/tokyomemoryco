@@ -17,7 +17,7 @@ export const site = {
   nameZh: '',
   title: 'Tokyo Memory Co',
   description:
-    'A minimal photography portfolio and blog — digital and film galleries, a photo-a-month calendar, and two blogs.',
+    'Travel Portrait Photographers for Hire in Tokyo.',
 };
 
 // Left-hand navigation. "Digital" is the home page and shows by default.
